@@ -39,22 +39,22 @@ function operate(in1, in2, operation) {
     // take inputs from the calculator and call relevant math functions
     switch (operation){
         case '+':
-            return add(in1, in2);
+            return add(in1, in2).toFixed(9);
             break;
         case '-':
-            return subtract(in1, in2);
+            return subtract(in1, in2).toFixed(9);
             break;
         case 'x':
-            return multiply(in1, in2);
+            return multiply(in1, in2).toFixed(9);
             break;
         case '÷':
-            return divide(in1, in2);
+            return divide(in1, in2).toFixed(9);
             break;
         case '^':
-            return power(in1, in2);
+            return power(in1, in2).toFixed(9);
             break;
         case '+/-':
-            return invert(in1);
+            return invert(in1).toFixed(9);
             break;
     }
 }
@@ -131,6 +131,52 @@ function deactivateOperation(input) {
     activatedOperation = false;
 }
 
+// function formatNumber(num) {
+//     if (typeof num !== 'number' || isNaN(num)) {
+//       return 'Invalid input';
+//     }
+  
+//     if (num >= 1e9 || num <= -1e9) {
+//       return num.toExponential(6);
+//     }
+  
+//     return parseFloat(num.toFixed(9));
+//   }
+
+//   function formatNumber(num) {
+//     if (num >= 1e9 || num <= -1e9) {
+//       return num.toExponential(7);
+//     }
+  
+//     let parts = num.toFixed(9).toString().split('.');
+//     let integerPart = parts[0].slice(0, 9);
+//     let decimalPart = parts[1] || '';
+  
+//     if (decimalPart.length > 0) {
+//       decimalPart = '.' + decimalPart;
+//     }
+  
+//     return parseFloat(integerPart + decimalPart);
+//   }
+
+function formatNumber(num) {
+    num = parseFloat(num).toFixed(9);
+    if (num.includes(".")) {
+      var whole = num.split(".")[0];
+      var dec = num.split(".")[1];
+      var leftDigits = 9 - whole.length;
+      if (leftDigits < 0) {
+        return num.slice(0, 9);
+      } else {
+        return parseFloat(num).toFixed(leftDigits + 1);
+      }
+    } else {
+      return num.slice(0, 9);
+    }
+  }
+  
+  
+  
 
 const buttons = document.querySelectorAll('.button');
 const numberButtons = document.querySelectorAll('.number');
@@ -152,7 +198,8 @@ numberButtons.forEach(button => {
         '-' || storedOperation === 'x' || storedOperation === '÷' || 
         storedOperation === '^' || storedOperation === '+/-') 
         && activatedOperation) {
-            // clear display and start new input after operation button is pressed
+            // clear display and start new input after operation button is
+            // pressed
             clearDisplay();
             console.log('this one')
             deactivateOperation();
@@ -191,10 +238,12 @@ operatorButtons.forEach(button => {
     
                 storedOperation = input;
             } else {
-                // for multiple operations without pressing '=' in between inputs
+                // for multiple operations without pressing '=' in between
+                // inputs
                 storeDisplay();
     
-                let result = operate(stored1, stored2, storedOperation);
+                let result = formatNumber(operate(stored1, 
+                    stored2, storedOperation));
     
                 clearDisplay();
     
@@ -228,7 +277,8 @@ equalsButton.forEach(button => {
     button.addEventListener('click', () => {
         storeDisplay();
 
-        result = operate(stored1, stored2, storedOperation);
+        result = formatNumber(operate(stored1, stored2, 
+            storedOperation));
 
         clearDisplay();
 
