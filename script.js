@@ -7,32 +7,32 @@ const displayContent = document.querySelector('#display-content');
 
 function add(in1, in2) {
     // take 2 inputs and add them
-    return parseInt(in1) + parseInt(in2);
+    return parseFloat(in1) + parseFloat(in2);
 }
 
 function subtract(in1, in2) {
     // take 2 inputs and subtract the second from the first
-    return parseInt(in1) - parseInt(in2);
+    return parseFloat(in1) - parseFloat(in2);
 }
 
 function multiply(in1, in2) {
     // take 2 inputs and multiply them
-    return parseInt(in1) * parseInt(in2);
+    return parseFloat(in1) * parseFloat(in2);
 }
 
 function divide(in1, in2) {
     // take 2 inputs, divide the first by the second
-    return parseInt(in1) / parseInt(in2);
+    return parseFloat(in1) / parseFloat(in2);
 }
 
 function power(in1, in2) {
     // take 2 inputs, raise the first to the power of the second
-    return Math.pow(parseInt(in1), parseInt(in2));
+    return Math.pow(parseFloat(in1), parseFloat(in2));
 }
 
 function invert(in1) {
     // take 1 input and return its inverse
-    return -1 * parseInt(in1);
+    return -1 * parseFloat(in1);
 }
 
 function operate(in1, in2, operation) {
@@ -143,6 +143,7 @@ let stored2 = '';
 let storedOperation = '';
 let logInputs = true;
 let activatedOperation = false;
+let resetDisplay = false;
 
 numberButtons.forEach(button => {
     button.addEventListener('click', e => {
@@ -153,11 +154,13 @@ numberButtons.forEach(button => {
         && activatedOperation) {
             // clear display and start new input after operation button is pressed
             clearDisplay();
+            console.log('this one')
             deactivateOperation();
             appendToDisplay(input);
-        } else if (logInputs && displayContent.innerText !== '' && checkStorageEmpty()) {
+        } else if (logInputs && resetDisplay) {
             // clear display and start new input if number buttons are 
             // pressed while old result is still displayed
+            console.log('resetDisplay: ',resetDisplay)
             clearDisplay();
             appendToDisplay(input);
         } else if (logInputs) {
@@ -165,6 +168,7 @@ numberButtons.forEach(button => {
         } else {
             return;
         }
+        resetDisplay = false;
     });
 });
 
@@ -231,6 +235,8 @@ equalsButton.forEach(button => {
         clearStorage();
 
         appendToDisplay(result);
+
+        resetDisplay = true;
     });
 });
 
@@ -241,5 +247,6 @@ buttons.forEach(button => {
     button.addEventListener('click', e => {
         console.log('Pressed: ', e.target.innerText);
         console.log("stored1: ", stored1, "stored2: ", stored2, "storedOperation: ", storedOperation);
+        console.log('resetDisplay: ',resetDisplay)
     })
 })
